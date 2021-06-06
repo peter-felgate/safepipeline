@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31105.61
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafePipeline", "SafePipeline.csproj", "{BF5793A9-3C97-4E76-8E1D-4F927C230589}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafePipeline.Tests", "..\SafePipeline.Tests\SafePipeline.Tests.csproj", "{A19D3ECD-877E-4E3B-9B12-C190839BD06E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF5793A9-3C97-4E76-8E1D-4F927C230589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF5793A9-3C97-4E76-8E1D-4F927C230589}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF5793A9-3C97-4E76-8E1D-4F927C230589}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF5793A9-3C97-4E76-8E1D-4F927C230589}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A19D3ECD-877E-4E3B-9B12-C190839BD06E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A19D3ECD-877E-4E3B-9B12-C190839BD06E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A19D3ECD-877E-4E3B-9B12-C190839BD06E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A19D3ECD-877E-4E3B-9B12-C190839BD06E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C1F557DE-157A-47EC-837D-BDB9C6F34523}
+	EndGlobalSection
+EndGlobal
