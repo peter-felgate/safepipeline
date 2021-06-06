@@ -2,6 +2,25 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Version>0.1.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Peter Felgate</Authors>
+    <Description>Very simple monad that:
+- allows basic logic checks
+- allows mixing up of asnyc and sync calls
+- gives the opportunity of code re-use
+- provides exception handling
+- makes writing testable code with low cyclomatic complexity easy</Description>
+    <Copyright>(c) 2021 Peter Felgate</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/peter-felgate/safepipeline</PackageProjectUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
