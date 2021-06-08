@@ -147,5 +147,35 @@ namespace SafePipeline.Tests
             result.Should().BeOfType<Ok<string>>();
             monitor.Should().BeEquivalentTo(new Monitor { Success = true });
         }
+
+        [Fact]
+        public void The_pipeline_works()
+        {
+            // arrange
+            var pipeline = SafePipeline.StartWith("start value");
+            var progress = "";
+
+            // act
+            Task<Operable<string>> task = pipeline
+                .Then(TestHelpers.AddStringValue)
+                .Then(TestHelpers.WaitAndThrow)
+                .Then(TestHelpers.AddStringValue)
+                .OnFailure(f =>
+                {
+                    progress = f.InputIntoFailedStep<string>();
+                });
+                
+            Task.WaitAll(task);
+
+            var result = task.Result;
+
+            // assert
+            result.IsOk.Should().BeFalse();
+            result.Should().BeOfType<Fail<string>>();
+            Exception ex = result;
+            ex.Should().BeOfType<NotImplementedException>();
+
+            progress.Should().Be("start value_Updated");
+        }
     }
 }

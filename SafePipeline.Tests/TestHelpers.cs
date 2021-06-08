@@ -22,6 +22,12 @@ namespace SafePipeline.Tests
             await Task.Delay(250);
             return await Task.Run(() => $"{context}_Waited");
         }
+
+        public static async Task<T> WaitAndThrow<T>(T context)
+        {
+            await Task.Delay(1000);
+            throw new NotImplementedException();
+        }
     }
 
     public class Monitor

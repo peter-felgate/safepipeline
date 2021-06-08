@@ -4,11 +4,30 @@ using System.Threading.Tasks;
 
 namespace SafePipeline
 {
-    [DebuggerStepThrough]
-    public abstract class Operable<T>
+//    [DebuggerStepThrough]
+    public interface IOperable
+    {
+    }
+
+    public abstract class Operable<T> : IOperable
     {
         public abstract T Value { get; }
         public PipelineInfo Info { get; protected set; }
+        protected object InputFromFailedStep;
+        
+        public object InputIntoFailedStep() => InputFromFailedStep;
+
+        public TInputType InputIntoFailedStep<TInputType>()
+        {
+            if (!(this is Fail<T>)) return default;
+
+            return InputFromFailedStep switch
+            {
+                Operable<TInputType> operable => operable.Value,
+                TInputType input => input,
+                _ => default
+            };
+        } 
         public static implicit operator T(Operable<T> item) => item.Value;
         public static implicit operator Exception(Operable<T> item) => (item as Fail<T>)?.Exception;
         public bool IsOk => !typeof(Fail<T>).IsAssignableFrom(GetType());
@@ -49,13 +68,13 @@ namespace SafePipeline
 
     public class Fail<T> : Operable<T>
     {
-        public override T Value => default(T);
+        public override T Value => default;
 
         public Exception Exception { get; }
 
-        [DebuggerStepThrough]
-        public Fail(Exception exception = null)
+        public Fail(object inputFromFailedStep, Exception exception = null)
         {
+            InputFromFailedStep = inputFromFailedStep;
             Exception = exception;
         }
     }
@@ -81,15 +100,15 @@ namespace SafePipeline
                     }
                     catch (Exception e)
                     {
-                        return new Fail<TToType>(e);
+                        return new Fail<TToType>(ok.Value, e);
                     }
                 case Skip<TToType> skip:
                     return skip;
                 case Fail<TFromType> fail:
-                    return new Fail<TToType>(fail.Exception);
+                    return new Fail<TToType>(fail.InputIntoFailedStep(), fail.Exception);
             }
 
-            return new Fail<TToType>();
+            return new Fail<TToType>(input.Value);
         }
 
         public static async Task<Operable<TToType>> Then<TFromType, TToType>(this Task<Operable<TFromType>> inputTask,
@@ -108,15 +127,15 @@ namespace SafePipeline
                     }
                     catch (Exception e)
                     {
-                        return new Fail<TToType>(e);
+                        return new Fail<TToType>(input.Value, e);
                     }
                 case Skip<TToType> skip:
                     return skip;
                 case Fail<TFromType> fail:
-                    return new Fail<TToType>(fail.Exception);
+                    return new Fail<TToType>(fail.InputIntoFailedStep(), fail.Exception);
             }
 
-            return new Fail<TToType>();
+            return new Fail<TToType>(input.Value);
         }
 
         public static async Task<Operable<TToType>> Then<TFromType, TToType>(this Task<Operable<TFromType>> inputTask,
@@ -133,15 +152,15 @@ namespace SafePipeline
                     }
                     catch (Exception e)
                     {
-                        return new Fail<TToType>(e);
+                        return new Fail<TToType>(input.Value, e);
                     }
                 case Skip<TToType> skip:
                     return skip;
                 case Fail<TFromType> fail:
-                    return new Fail<TToType>(fail.Exception);
+                    return new Fail<TToType>(fail.InputIntoFailedStep(), fail.Exception);
             }
 
-            return new Fail<TToType>();
+            return new Fail<TToType>(input.Value);
         }
 
         public static Operable<TToType> AsOperable<TToType>(this Task<Operable<TToType>> input)
