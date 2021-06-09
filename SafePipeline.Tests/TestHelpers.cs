@@ -12,10 +12,10 @@ namespace SafePipeline.Tests
 
         public static string AddStringValue(string context) => $"{context}_Updated";
 
-        public static Operable<string> YesNo(Operable<string> context) => 
-            string.Compare(context, "Yes", StringComparison.CurrentCultureIgnoreCase) == 0 
-                ? (Operable<string>)new Ok<string>(context.Value) 
-                : new Skip<string>();
+        public static Task<Operable<string>> YesNo(string context) => 
+            Task.FromResult(string.Compare(context, "Yes", StringComparison.CurrentCultureIgnoreCase) == 0 
+                ? (Operable<string>)new Ok<string>(context) 
+                : new Skip<string>());
 
         public static async Task<string> WaitForIt(string context)
         {

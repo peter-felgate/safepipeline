@@ -47,7 +47,7 @@ namespace SafePipeline.Tests
 
             // act
             var result = await pipeline
-                .Then(TestHelpers.YesNo)
+                .Check(TestHelpers.YesNo)
                 .Then(TestHelpers.AddStringValue)
                 .Then(TestHelpers.WaitForIt);
 
@@ -65,7 +65,7 @@ namespace SafePipeline.Tests
             // act
             var result = await pipeline
                 .Then(TestHelpers.AddStringValue)
-                .Then(TestHelpers.YesNo)
+                .Check(TestHelpers.YesNo)
                 .Then(TestHelpers.WaitForIt);
 
             // assert
@@ -99,7 +99,7 @@ namespace SafePipeline.Tests
 
             // act
             var result = await pipeline
-                .Then(TestHelpers.YesNo)
+                .Check(TestHelpers.YesNo)
                 .OnSuccess(s => monitor.Success = true)
                 .OnFailure(s => monitor.Failure = true)
                 .OnSkip(s => monitor.Skip = true);
