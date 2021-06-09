@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace SafePipeline
 {
-//    [DebuggerStepThrough]
+    [DebuggerStepThrough]
     public interface IOperable
     {
     }
@@ -31,6 +31,8 @@ namespace SafePipeline
         public static implicit operator T(Operable<T> item) => item.Value;
         public static implicit operator Exception(Operable<T> item) => (item as Fail<T>)?.Exception;
         public bool IsOk => !typeof(Fail<T>).IsAssignableFrom(GetType());
+
+        protected object _input;
     }
 
     public class PipelineInfo
