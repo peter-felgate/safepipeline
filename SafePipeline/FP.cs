@@ -49,12 +49,18 @@ namespace SafePipeline
 
     public class Skip<T> : Operable<T>
     {
-        public override T Value => default;
+        public override T Value { get; }
 
         [DebuggerStepThrough]
         public Skip(PipelineInfo info)
         {
             Info = info;
+        }
+
+        [DebuggerStepThrough]
+        public Skip(T value)
+        {
+            Value = value;
         }
 
         [DebuggerStepThrough]
@@ -130,6 +136,24 @@ namespace SafePipeline
             return new Fail<TToType>(input.Value);
         }
 
+        public static async Task<Operable<TToType>> Then<TFromType, TToType>(
+            this Task<Operable<TFromType>> inputTask,
+            Func<TFromType, Task<Operable<TToType>>> actor)
+        {
+            Operable<TFromType> input = await inputTask;
+            Operable<TFromType> operable = input;
+            if (!(operable is Ok<TFromType> ok) || ok.Value.Equals((object)default(TFromType)))
+                return operable is Skip<TToType> skip ? (Operable<TToType>)skip : (operable is Fail<TFromType> fail ? (Operable<TToType>)new Fail<TToType>(fail.InputIntoFailedStep(), fail.Exception) : (Operable<TToType>)new Fail<TToType>((object)input.Value));
+            try
+            {
+                return (Operable<TToType>)new Ok<TToType>(await actor(input));
+            }
+            catch (Exception ex)
+            {
+                return (Operable<TToType>)new Fail<TToType>((object)input.Value, ex);
+            }
+        }
+
         /// <summary>
         /// when the input step has finished, continue updating the context with the function provided
         /// but return the operable value provided by the actor function.
@@ -195,7 +219,7 @@ namespace SafePipeline
 
             switch (input)
             {
-                case Ok<TFromType> ok when !ok.Value.Equals(default(TFromType)):
+                case Ok<TFromType> ok when ok.Value?.Equals(default(TFromType)) == false:
                     try
                     {
                         var acted = await actor(input);
@@ -230,7 +254,7 @@ namespace SafePipeline
 
             switch (input)
             {
-                case Ok<TFromType> ok when !ok.Value.Equals(default(TFromType)):
+                case Ok<TFromType> ok when ok.Value?.Equals(default(TFromType)) == false:
                     try
                     {
                         return actor(input.Value);
