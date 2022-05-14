@@ -146,7 +146,7 @@ namespace SafePipeline
                 return operable is Skip<TToType> skip ? (Operable<TToType>)skip : (operable is Fail<TFromType> fail ? (Operable<TToType>)new Fail<TToType>(fail.InputIntoFailedStep(), fail.Exception) : (Operable<TToType>)new Fail<TToType>((object)input.Value));
             try
             {
-                return (Operable<TToType>)new Ok<TToType>(await actor(input));
+                return await actor(input);
             }
             catch (Exception ex)
             {
