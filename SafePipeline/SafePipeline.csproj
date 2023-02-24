@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Version>0.5.0</Version>
+    <Version>1.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Peter Felgate</Authors>
     <Description>Very simple monad that:
@@ -11,14 +11,21 @@
 - gives the opportunity of code re-use
 - provides exception handling
 - makes writing testable code with low cyclomatic complexity easy</Description>
-    <Copyright>(c) 2022 Peter Felgate</Copyright>
+    <Copyright>(c) 2023 Peter Felgate</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/peter-felgate/safepipeline</PackageProjectUrl>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>0.5.0.0</FileVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
   <ItemGroup>
+      <None Include="README.md" Pack="True" PackagePath="\"/>
+  </ItemGroup>
+
+      <ItemGroup>
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
